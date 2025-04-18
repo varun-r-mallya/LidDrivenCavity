@@ -19,9 +19,15 @@ int main(const int argc, char **argv) {
         const double time_step = config["LidDrivenCavity"]["time_step"].value_or(0.01);
         const int max_iterations = config["LidDrivenCavity"]["max_iterations"].value_or(1000);
         const double tolerance = config["LidDrivenCavity"]["tolerance"].value_or(1e-6);
+        const bool python_plot = config["LidDrivenCavity"]["python_plot"].value_or(true);
 
         LidDrivenCavity cavity(Re, Length, grid_points, time_step, max_iterations, tolerance);
         cavity.solve();
+
+        if (python_plot) {
+            system("python plot.py");
+        }
+
     } catch (const toml::parse_error &err) {
         std::cerr << "Parsing failed:\n" << err << "\n";
         return 1;

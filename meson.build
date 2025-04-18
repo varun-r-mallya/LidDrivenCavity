@@ -16,6 +16,18 @@ sources = files(
     'src/LidDrivenCavity.cpp'
 )
 
+configure_file(
+    input: 'config.toml',
+    output: 'config.toml',
+    copy: true
+)
+
+configure_file(
+    input: 'src/plot.py',
+    output: 'plot.py',
+    copy: true
+)
+
 LidDrivenCavity = executable('LidDrivenCavity',
                              sources,
                              dependencies : [sfml_dep, open_mp_dep, toml_dep],
