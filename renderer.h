@@ -25,7 +25,6 @@ public:
                     const std::vector<std::vector<double> > &v);
 
 private:
-    void drawVelocityField() const;
 
     void drawColorMap() const;
 

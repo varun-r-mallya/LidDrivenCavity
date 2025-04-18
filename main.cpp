@@ -12,7 +12,7 @@ public:
                     double dt = 0.001, int max_iter = 10000, double tol = 1e-6)
         : Re(Re), L(L), N(N), dt(dt), max_iter(max_iter), tol(tol),
           dx(L / (N - 1)), dy(L / (N - 1)), u_top(1.0) {
-        // Initialize arrays
+
         psi = std::vector<std::vector<double> >(N, std::vector<double>(N, 0.0));
         zeta = std::vector<std::vector<double> >(N, std::vector<double>(N, 0.0));
         u = std::vector<std::vector<double> >(N, std::vector<double>(N, 0.0));
@@ -240,7 +240,7 @@ private:
 int main() {
     // Create and run solve
     omp_set_num_threads(omp_get_max_threads());
-    LidDrivenCavity cavity(500.0, 1.0, 200, 0.01, 10000);
+    LidDrivenCavity cavity(1000.0, 1.0, 100, 0.01, 1000);
 
     cavity.solve();
     // cavity.save_results("cavity_results.csv");

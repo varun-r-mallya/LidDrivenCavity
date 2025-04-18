@@ -41,7 +41,6 @@ void Renderer::render() const {
 
     window->clear(sf::Color::White);
     drawColorMap();
-    drawVelocityField();
     window->display();
 }
 
@@ -51,36 +50,6 @@ void Renderer::updateData(const std::vector<std::vector<double> > &u,
     this->v = v;
     calculateVorticity();
     findMinMaxValues();
-}
-
-void Renderer::drawVelocityField() const {
-    int gridSize = u.size();
-    float scale = std::min(windowWidth, windowHeight) / static_cast<float>(gridSize);
-    for (int i = 0; i < gridSize; i += 3) {
-        for (int j = 0; j < gridSize; j += 3) {
-            float posX = i * scale;
-            float posY = j * scale;
-
-            float velX = u[i][j] * scale * 0.1f;
-            float velY = v[i][j] * scale * 0.1f;
-
-            sf::Vertex line[] = {
-                sf::Vertex(sf::Vector2f(posX, posY), sf::Color::Black),
-                sf::Vertex(sf::Vector2f(posX + velX, posY + velY), sf::Color::Black)
-            };
-
-            window->draw(line, 2, sf::Lines);
-
-            // Draw arrow head
-            if (std::hypot(velX, velY) > 2.0f) {
-                sf::CircleShape arrowHead(3, 3);
-                arrowHead.setPosition(posX + velX, posY + velY);
-                arrowHead.setRotation(std::atan2(velY, velX) * 180.0f / 3.14159f + 90);
-                arrowHead.setFillColor(sf::Color::Black);
-                window->draw(arrowHead);
-            }
-        }
-    }
 }
 
 void Renderer::drawColorMap() const {
@@ -94,8 +63,8 @@ void Renderer::drawColorMap() const {
             sf::Color color;
             if (normalized < 0.5) {
                 color.r = static_cast<sf::Uint8>(2 * normalized * 255);
-                color.b = static_cast<sf::Uint8>(2 * normalized * 255);
-                color.g = 255;
+                color.g = static_cast<sf::Uint8>(2 * normalized * 255);
+                color.b = 255;
             } else {
                 color.r = 255;
                 color.g = static_cast<sf::Uint8>((1.0 - 2 * (normalized - 0.5)) * 255);
