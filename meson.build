@@ -8,7 +8,8 @@ open_mp_dep = dependency('openmp')
 # Source files
 sources = files(
     'renderer.cpp',
-    'main.cpp'
+    'main.cpp',
+    'LidDrivenCavity.cpp'
 )
 
 LidDrivenCavity = executable('LidDrivenCavity',
