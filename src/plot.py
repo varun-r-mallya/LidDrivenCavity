@@ -59,7 +59,7 @@ def plot_results(X, Y, psi, zeta, u, v):
 
 if __name__ == "__main__":
     # Load results from C++ simulation
-    X, Y, psi, zeta, u, v = load_results("buildDir/cavity_results.csv")
+    X, Y, psi, zeta, u, v = load_results("../buildDir/cavity_results.csv")
 
     # Plot results
     plot_results(Y, X, psi, zeta, u, v)
