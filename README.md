@@ -1,5 +1,7 @@
 # LidDrivenCavity
-This is an implementation of CFD codes for the Lid Driven Cavity using OpenMP, C++ and Vorticity Streamfunction formulation
+This is an implementation of CFD codes for the Lid Driven Cavity using OpenMP, C++ and Vorticity Streamfunction formulation.
+
+[Paper](https://www.iist.ac.in/sites/default/files/people/psi-omega.pdf)
 
 ## To run
 - Step 1: `meson setup buildDir`
