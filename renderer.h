@@ -15,7 +15,7 @@ public:
 
     void initialize();
 
-    bool isWindowOpen() const;
+    [[nodiscard]] bool isWindowOpen() const;
 
     void handleEvents() const;
 
@@ -25,7 +25,6 @@ public:
                     const std::vector<std::vector<double> > &v);
 
 private:
-
     void drawColorMap() const;
 
     void calculateVorticity();

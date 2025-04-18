@@ -8,11 +8,10 @@
 
 class LidDrivenCavity {
 public:
-    LidDrivenCavity(double Re = 100.0, double L = 1.0, int N = 100,
-                    double dt = 0.001, int max_iter = 10000, double tol = 1e-6)
+    explicit LidDrivenCavity(const double Re = 100.0, const double L = 1.0, const int N = 100,
+                             const double dt = 0.001, const int max_iter = 10000, const double tol = 1e-6)
         : Re(Re), L(L), N(N), dt(dt), max_iter(max_iter), tol(tol),
           dx(L / (N - 1)), dy(L / (N - 1)), u_top(1.0) {
-
         psi = std::vector<std::vector<double> >(N, std::vector<double>(N, 0.0));
         zeta = std::vector<std::vector<double> >(N, std::vector<double>(N, 0.0));
         u = std::vector<std::vector<double> >(N, std::vector<double>(N, 0.0));
@@ -47,7 +46,7 @@ public:
             // Perform one iteration
             apply_boundary_conditions();
             solve_vorticity();
-            solve_streamfunction();
+            solve_stream_function();
             compute_velocities();
 
             renderer.updateData(u, v);
@@ -62,8 +61,7 @@ public:
             for (int i = 0; i < N; ++i) {
 #pragma omp parallel for
                 for (int j = 0; j < N; ++j) {
-                    double diff = std::abs(zeta[i][j] - zeta_old[i][j]);
-                    if (diff > max_diff) max_diff = diff;
+                    if (double diff = std::abs(zeta[i][j] - zeta_old[i][j]); diff > max_diff) max_diff = diff;
                 }
             }
 
@@ -79,8 +77,8 @@ public:
             }
         }
 
-        auto end = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+        const auto end = std::chrono::high_resolution_clock::now();
+        const auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
         std::cout << "Simulation completed in " << duration.count() << " ms" << std::endl;
 
         while (renderer.isWindowOpen()) {
@@ -89,7 +87,7 @@ public:
         }
     }
 
-    void save_results(const std::string &filename) {
+    void save_results(const std::string &filename) const {
         std::ofstream outfile(filename);
 
         // Write header
@@ -148,12 +146,12 @@ private:
 #pragma omp parallel for
             for (int j = 1; j < N - 1; ++j) {
                 // Convection terms
-                double u_zeta_x = u[i][j] * (zeta[i][j + 1] - zeta[i][j - 1]) / (2.0 * dx);
-                double v_zeta_y = v[i][j] * (zeta[i + 1][j] - zeta[i - 1][j]) / (2.0 * dy);
+                const double u_zeta_x = u[i][j] * (zeta[i][j + 1] - zeta[i][j - 1]) / (2.0 * dx);
+                const double v_zeta_y = v[i][j] * (zeta[i + 1][j] - zeta[i - 1][j]) / (2.0 * dy);
 
                 // Diffusion terms
-                double diff_x = (zeta[i][j + 1] - 2.0 * zeta[i][j] + zeta[i][j - 1]) / (dx * dx);
-                double diff_y = (zeta[i + 1][j] - 2.0 * zeta[i][j] + zeta[i - 1][j]) / (dy * dy);
+                const double diff_x = (zeta[i][j + 1] - 2.0 * zeta[i][j] + zeta[i][j - 1]) / (dx * dx);
+                const double diff_y = (zeta[i + 1][j] - 2.0 * zeta[i][j] + zeta[i - 1][j]) / (dy * dy);
 
                 // Update vorticity
                 zeta_new[i][j] = zeta[i][j] + dt * (
@@ -165,21 +163,21 @@ private:
         zeta = zeta_new;
     }
 
-    void solve_streamfunction() {
-        const double omega = 1.5; // Relaxation parameter
+    void solve_stream_function() {
 #pragma omp parallel for
         for (int k = 0; k < 100; ++k) {
 #pragma omp parallel for
             for (int i = 1; i < N - 1; ++i) {
 #pragma omp parallel for
                 for (int j = 1; j < N - 1; ++j) {
+                    constexpr double omega = 1.5;
                     // Update stream function using SOR
-                    double psi_new = (1.0 - omega) * psi[i][j] + omega * (
-                                         (dy * dy * (psi[i][j + 1] + psi[i][j - 1]) +
-                                          dx * dx * (psi[i + 1][j] + psi[i - 1][j]) +
-                                          dx * dx * dy * dy * zeta[i][j]) /
-                                         (2.0 * (dx * dx + dy * dy))
-                                     );
+                    const double psi_new = (1.0 - omega) * psi[i][j] + omega * (
+                                               (dy * dy * (psi[i][j + 1] + psi[i][j - 1]) +
+                                                dx * dx * (psi[i + 1][j] + psi[i - 1][j]) +
+                                                dx * dx * dy * dy * zeta[i][j]) /
+                                               (2.0 * (dx * dx + dy * dy))
+                                           );
                     psi[i][j] = psi_new;
                 }
             }

@@ -11,14 +11,14 @@ void Renderer::initialize() {
     findMinMaxValues();
 }
 
-Renderer::Renderer(int width, int height,
+Renderer::Renderer(const int width, const int height,
                    std::vector<std::vector<double> > &u,
                    std::vector<std::vector<double> > &v,
                    std::vector<double> &x,
                    std::vector<double> &y)
     : windowWidth(width), windowHeight(height),
       u(u), v(v), x(x), y(y),
-      vorticity(u.size(), std::vector<double>(u[0].size(), 0.0)), minVorticity(0), maxVorticity(0) {
+      vorticity(u.size(), std::vector(u[0].size(), 0.0)), minVorticity(0), maxVorticity(0) {
 }
 
 bool Renderer::isWindowOpen() const {
@@ -53,8 +53,8 @@ void Renderer::updateData(const std::vector<std::vector<double> > &u,
 }
 
 void Renderer::drawColorMap() const {
-    int gridSize = u.size();
-    float cellSize = std::min(windowWidth, windowHeight) / static_cast<float>(gridSize);
+    const int gridSize = u.size();
+    const float cellSize = std::min(windowWidth, windowHeight) / static_cast<float>(gridSize);
     for (int i = 0; i < gridSize; ++i) {
         for (int j = 0; j < gridSize; ++j) {
             double normalized = (vorticity[i][j] - minVorticity) / (maxVorticity - minVorticity);
@@ -80,7 +80,7 @@ void Renderer::drawColorMap() const {
 }
 
 void Renderer::calculateVorticity() {
-    int gridSize = u.size();
+    const int gridSize = u.size();
 #pragma omp parallel for
     for (int i = 1; i < gridSize - 1; ++i) {
         for (int j = 1; j < gridSize - 1; ++j) {
@@ -94,7 +94,7 @@ void Renderer::findMinMaxValues() {
     minVorticity = vorticity[1][1];
     maxVorticity = vorticity[1][1];
 
-    int gridSize = u.size();
+    const int gridSize = u.size();
 #pragma omp parallel for reduction(min:minVorticity) reduction(max:maxVorticity)
     for (int i = 1; i < gridSize - 1; ++i) {
         for (int j = 1; j < gridSize - 1; ++j) {
