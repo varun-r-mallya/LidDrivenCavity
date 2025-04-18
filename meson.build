@@ -5,6 +5,10 @@ project('LidDrivenCavity', 'cpp',
 sfml_dep = dependency('sfml-all')
 open_mp_dep = dependency('openmp')
 
+toml_dir = include_directories('subprojects/tomlplusplus')
+toml_dep = declare_dependency(include_directories: toml_dir)
+
+tomlplusplus = subproject('tomlplusplus')
 # Source files
 sources = files(
     'src/renderer.cpp',
@@ -14,5 +18,5 @@ sources = files(
 
 LidDrivenCavity = executable('LidDrivenCavity',
                              sources,
-                             dependencies : [sfml_dep, open_mp_dep],
+                             dependencies : [sfml_dep, open_mp_dep, toml_dep],
                              install : true)
