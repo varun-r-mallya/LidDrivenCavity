@@ -27,7 +27,6 @@ int main(const int argc, char **argv) {
         if (python_plot) {
             system("python plot.py");
         }
-
     } catch (const toml::parse_error &err) {
         std::cerr << "Parsing failed:\n" << err << "\n";
         return 1;

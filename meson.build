@@ -6,7 +6,7 @@ sfml_dep = dependency('sfml-all')
 open_mp_dep = dependency('openmp')
 
 toml_dir = include_directories('subprojects/tomlplusplus')
-toml_dep = declare_dependency(include_directories: toml_dir)
+toml_dep = declare_dependency(include_directories : toml_dir)
 
 tomlplusplus = subproject('tomlplusplus')
 # Source files
@@ -17,15 +17,15 @@ sources = files(
 )
 
 configure_file(
-    input: 'config.toml',
-    output: 'config.toml',
-    copy: true
+    input : 'config.toml',
+    output : 'config.toml',
+    copy : true
 )
 
 configure_file(
-    input: 'src/plot.py',
-    output: 'plot.py',
-    copy: true
+    input : 'src/plot.py',
+    output : 'plot.py',
+    copy : true
 )
 
 LidDrivenCavity = executable('LidDrivenCavity',
