@@ -28,7 +28,7 @@ public:
     }
 
     void solve() {
-        auto start = std::chrono::high_resolution_clock::now();
+        const auto start = std::chrono::high_resolution_clock::now();
 
         Renderer renderer(800, 800, u, v, x, y);
         renderer.initialize();
@@ -60,20 +60,20 @@ public:
 #pragma omp parallel for reduction(+:max_diff)
             for (int i = 0; i < N; ++i) {
 #pragma omp parallel for
-                for (int j = 0; j < N; ++j) {
-                    if (double diff = std::abs(zeta[i][j] - zeta_old[i][j]); diff > max_diff) max_diff = diff;
+                for (auto j = 0; j < N; ++j) {
+                    const double diff = std::abs(zeta[i][j] - zeta_old[i][j]);
+                    if (diff > max_diff) max_diff = diff;
                 }
             }
 
             if (n % 100 == 0) {
                 std::cout << "Iteration: " << n << ", Max change: " << max_diff << std::endl;
                 save_results("cavity_results.csv");
-                // system("python plot.py");
             }
 
             if (max_diff < tol) {
-                std::cout << "Converged after " << n << " iterations" << std::endl;
-                break;
+            std::cout << "Converged after " << n << " iterations" << std::endl;
+            break;
             }
         }
 
@@ -103,7 +103,7 @@ public:
         }
 
         outfile.close();
-        std::cout << "Results saved to " << filename << std::endl;
+        std::cout << "Results saved to " << filename << "\n";
     }
 
 private:
@@ -238,7 +238,7 @@ private:
 int main() {
     // Create and run solve
     omp_set_num_threads(omp_get_max_threads());
-    LidDrivenCavity cavity(1000.0, 1.0, 100, 0.01, 1000);
+    LidDrivenCavity cavity(400.0, 1.0, 100, 0.01, 1000);
 
     cavity.solve();
     // cavity.save_results("cavity_results.csv");
