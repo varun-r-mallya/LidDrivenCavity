@@ -3,7 +3,7 @@
 
 int main() {
     omp_set_num_threads(omp_get_max_threads());
-    LidDrivenCavity cavity(500.0, 2.0, 100, 0.01, 1000);
+    LidDrivenCavity cavity(500.0, 2.0, 100, 0.01, 1000, 1e-6);
     cavity.solve();
 
     return 0;

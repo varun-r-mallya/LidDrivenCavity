@@ -11,8 +11,8 @@
 
 class LidDrivenCavity {
 public:
-    explicit LidDrivenCavity(double Re = 100.0, double L = 1.0, int N = 100,
-                             double dt = 0.001, int max_iter = 10000, double tol = 1e-6);
+    explicit LidDrivenCavity(double Re = 500.0, double L = 2.0, int N = 100,
+                             double dt = 0.01, int max_iter = 10000, double tol = 1e-6);
 
     void solve();
 
