@@ -4,6 +4,7 @@ This is an implementation of CFD codes for the Lid Driven Cavity using OpenMP, C
 [Paper](https://www.iist.ac.in/sites/default/files/people/psi-omega.pdf)
 
 ## To run
+- Step 0; `git clone https://github.com/varun-r-mallya/LidDrivenCavity.git ; cd LidDrivenCavity; git submodule update --init --recursive`
 - Step 1: `meson setup buildDir`
 - Step 2: `cd buildDir`
 - Step 3: `ninja`
