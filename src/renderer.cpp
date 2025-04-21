@@ -61,14 +61,38 @@ void Renderer::drawColorMap() const {
             normalized = std::max(0.0, std::min(1.0, normalized));
 
             sf::Color color;
-            if (normalized < 0.5) {
-                color.r = static_cast<sf::Uint8>(2 * normalized * 255);
-                color.g = static_cast<sf::Uint8>(2 * normalized * 255);
-                color.b = 255;
-            } else {
+
+            if (normalized < 0.15) {
+                // Black to Deep Blue
+                color.r = 0;
+                color.g = 0;
+                color.b = static_cast<sf::Uint8>(normalized / 0.15 * 255 * 0.5);  // Max 127
+            } else if (normalized < 0.3) {
+                // Blue to Purple
+                color.r = static_cast<sf::Uint8>((normalized - 0.15) / 0.15 * 200);
+                color.g = 0;
+                color.b = 127 + static_cast<sf::Uint8>((normalized - 0.15) / 0.15 * 128);
+            } else if (normalized < 0.5) {
+                // Purple to Magenta to Red
+                color.r = 200 + static_cast<sf::Uint8>((normalized - 0.3) / 0.2 * 55);
+                color.g = 0;
+                color.b = static_cast<sf::Uint8>((0.5 - normalized) / 0.2 * 255);
+            } else if (normalized < 0.7) {
+                // Red to Orange-Yellow
                 color.r = 255;
-                color.g = static_cast<sf::Uint8>((1.0 - 2 * (normalized - 0.5)) * 255);
-                color.b = static_cast<sf::Uint8>((1.0 - 2 * (normalized - 0.5)) * 255);
+                color.g = static_cast<sf::Uint8>((normalized - 0.5) / 0.2 * 255);
+                color.b = 0;
+            } else if (normalized < 0.9) {
+                // Orange-Yellow to Yellow-White
+                color.r = 255;
+                color.g = 255;
+                color.b = static_cast<sf::Uint8>((normalized - 0.7) / 0.2 * 200);
+            } else {
+                // Bright white flash for high vorticity
+                sf::Uint8 intensity = static_cast<sf::Uint8>(200 + (normalized - 0.9) / 0.1 * 55);
+                color.r = intensity;
+                color.g = intensity;
+                color.b = intensity;
             }
 
             sf::RectangleShape rect(sf::Vector2f(cellSize, cellSize));
