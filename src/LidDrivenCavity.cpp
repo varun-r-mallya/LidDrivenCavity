@@ -41,7 +41,7 @@ auto LidDrivenCavity::compute_velocities() -> void {
 void LidDrivenCavity::solve_stream_function() {
     constexpr double relaxation_factor = 0.2;
 #pragma omp parallel for
-    for (int k = 0; k < 30; ++k) {
+    for (int k = 0; k < 10; ++k) {
         for (int i = 1; i < N - 1; ++i) {
             for (int j = 1; j < N - 1; ++j) {
                 // Update stream function using SOR
@@ -154,9 +154,9 @@ auto LidDrivenCavity::apply_boundary_conditions() -> void {
 }
 
 LidDrivenCavity::LidDrivenCavity(const double Re, const double L, const int N,
-                                 const double dt, const int max_iter, const double tol)
+                                 const double dt, const int max_iter, const double tol, const double lid_velocity)
     : Re(Re), L(L), N(N), dt(dt), max_iter(max_iter), tol(tol),
-      dx(L / (N - 1)), dy(L / (N - 1)), u_top(1.0) {
+      dx(L / (N - 1)), dy(L / (N - 1)), u_top(lid_velocity) {
     psi = std::vector<std::vector<double> >(N, std::vector<double>(N, 0.0));
     vorticity = std::vector<std::vector<double> >(N, std::vector<double>(N, 0.0));
     u = std::vector<std::vector<double> >(N, std::vector<double>(N, 0.0));
