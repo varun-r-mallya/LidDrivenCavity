@@ -2,6 +2,7 @@
 This is an implementation of CFD codes for the Lid Driven Cavity using OpenMP, C++ and Vorticity Streamfunction formulation.
 
 [Paper](https://www.iist.ac.in/sites/default/files/people/psi-omega.pdf)
+[Video](https://www.youtube.com/watch?v=3JnBTB0Edak)
 
 ## To run
 - Step 0;
