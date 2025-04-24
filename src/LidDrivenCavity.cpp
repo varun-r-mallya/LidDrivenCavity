@@ -41,7 +41,7 @@ auto LidDrivenCavity::compute_velocities() -> void {
 void LidDrivenCavity::solve_stream_function() {
     constexpr double relaxation_factor = 0.2;
 #pragma omp parallel for
-    for (int k = 0; k < 100; ++k) {
+    for (int k = 0; k < 30; ++k) {
         for (int i = 1; i < N - 1; ++i) {
             for (int j = 1; j < N - 1; ++j) {
                 // Update stream function using SOR

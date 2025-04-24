@@ -4,7 +4,7 @@
 #include "subprojects/tomlplusplus/toml.hpp"
 
 int main(const int argc, char **argv) {
-    omp_set_num_threads(omp_get_max_threads());
+    omp_set_num_threads(6);
     std::string config_file = "config.toml";
 
     if (argc > 1) {

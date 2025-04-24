@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
 
 
 def load_results(filename):
@@ -36,9 +35,19 @@ def plot_results(X, Y, psi, zeta, u, v):
 
     # Vorticity contour plot
     plt.subplot(1, 3, 2)
-    plt.contourf(X, Y, zeta, levels=20, cmap='coolwarm')
-    plt.colorbar(label='Vorticity')
-    plt.title('Vorticity')
+    x_uniform = np.linspace(X.min(), X.max(), X.shape[1])
+    y_uniform = np.linspace(Y.min(), Y.max(), Y.shape[0])
+    X_uniform, Y_uniform = np.meshgrid(x_uniform, y_uniform)
+    u_uniform = np.zeros_like(X_uniform)
+    v_uniform = np.zeros_like(Y_uniform)
+
+    for i in range(X.shape[0]):
+        u_uniform[i, :] = np.interp(x_uniform, X[i, :], u[i, :])
+    for j in range(X.shape[1]):
+        v_uniform[:, j] = np.interp(y_uniform, Y[:, j], v[:, j])
+
+    plt.streamplot(X_uniform, Y_uniform, u_uniform, v_uniform, density=3)
+    plt.title('Flow Field')
     plt.xlabel('x')
     plt.ylabel('y')
 
@@ -57,9 +66,28 @@ def plot_results(X, Y, psi, zeta, u, v):
     plt.show()
 
 
+def check_continuity(X, Y, u, v):
+    dx = X[3, 6] - X[2, 6]
+    dy = Y[6, 3] - Y[6, 2]
+
+    du_dx = np.zeros_like(u)
+    dv_dy = np.zeros_like(v)
+
+    du_dx[:, 1:-1] = (u[:, 2:] - u[:, :-2]) / (2 * dx)
+    dv_dy[1:-1, :] = (v[2:, :] - v[:-2, :]) / (2 * dy)
+
+    divergence = du_dx + dv_dy
+
+    max_divergence = np.max(np.abs(divergence[1:-1, 1:-1]))
+    mean_divergence = np.mean(np.abs(divergence[1:-1, 1:-1]))
+    print(f"Maximum divergence: {max_divergence:.2e}")
+    print(f"Mean divergence: {mean_divergence:.2e}")
+
+
 if __name__ == "__main__":
     # Load results from C++ simulation
     X, Y, psi, zeta, u, v = load_results("../buildDir/cavity_results.csv")
 
     # Plot results
     plot_results(Y, X, psi, zeta, u, v)
+    check_continuity(X, Y, u, v)
