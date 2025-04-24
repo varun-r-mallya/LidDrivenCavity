@@ -4,7 +4,6 @@
 #include "subprojects/tomlplusplus/toml.hpp"
 
 int main(const int argc, char **argv) {
-    omp_set_num_threads(6);
     std::string config_file = "config.toml";
 
     if (argc > 1) {
@@ -21,7 +20,9 @@ int main(const int argc, char **argv) {
         const double tolerance = config["LidDrivenCavity"]["tolerance"].value_or(1e-6);
         const bool python_plot = config["LidDrivenCavity"]["python_plot"].value_or(true);
         const double lid_velocity = config["LidDrivenCavity"]["lid_velocity"].value_or(1.0);
+        const int number_of_threads = config["LidDrivenCavity"]["number_of_threads"].value_or(10);
 
+        omp_set_num_threads(number_of_threads);
         LidDrivenCavity cavity(Re, Length, grid_points, time_step, max_iterations, tolerance, lid_velocity);
         cavity.solve();
 

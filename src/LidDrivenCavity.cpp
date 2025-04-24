@@ -41,7 +41,7 @@ auto LidDrivenCavity::compute_velocities() -> void {
 void LidDrivenCavity::solve_stream_function() {
     constexpr double relaxation_factor = 0.2;
 #pragma omp parallel for
-    for (int k = 0; k < 10; ++k) {
+    for (int k = 0; k < 4; ++k) {
         for (int i = 1; i < N - 1; ++i) {
             for (int j = 1; j < N - 1; ++j) {
                 // Update stream function using SOR
@@ -177,6 +177,8 @@ auto LidDrivenCavity::solve() -> void {
 
     Renderer renderer(800, 800, u, v, x, y);
     renderer.initialize();
+    auto start_loop = std::chrono::high_resolution_clock::now();
+    auto end_loop = std::chrono::high_resolution_clock::now();
 
     for (int n = 0; n < max_iter; ++n) {
         // Store old vorticity for convergence check
@@ -188,16 +190,21 @@ auto LidDrivenCavity::solve() -> void {
         }
 
         // Perform one iteration
+        if (!n % 100)
+            start_loop = std::chrono::high_resolution_clock::now();
         apply_boundary_conditions();
         solve_vorticity();
         solve_stream_function();
         compute_velocities();
-
+        if (!n % 100)
+            end_loop = std::chrono::high_resolution_clock::now();
         renderer.updateData(u, v);
         renderer.render();
 
         if (n % 100 == 0) {
-            std::cout << "Iteration: " << n << std::endl;
+            const auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end_loop - start_loop);
+            std::cout << "Iteration: " << n << "\n";
+            std::cout << "Time elapsed: " << duration.count() << " ns\n";
         }
         // Check for convergence
         double max_diff = 0.0;
