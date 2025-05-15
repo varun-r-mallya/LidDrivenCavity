@@ -1,10 +1,10 @@
 [LidDrivenCavity]
-Re = 500.0              # Reynolds number
+Re = 100.0              # Reynolds number
 length = 1.0            # Length of Grid
-grid_points = 100       # Number Of GridPoints
-time_step = 0.01        # Time step
+grid_points = 129       # Number Of GridPoints
+time_step = 0.001        # Time step
 max_iterations = 100000     # Maximum Number of iterations
 tolerance = 1e-8        # tolerance adjust
 python_plot = true
 lid_velocity = 1.0
-number_of_threads = 17
+number_of_threads = 1
