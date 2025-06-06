@@ -3,6 +3,8 @@ This is an implementation of CFD codes for the Lid Driven Cavity using OpenMP, C
 
 [Paper](https://www.iist.ac.in/sites/default/files/people/psi-omega.pdf)
 [Video](https://www.youtube.com/watch?v=3JnBTB0Edak)
+[Report](https://github.com/user-attachments/files/20624129/Tau_Class___Lab_Report_Template.1.pdf)
+
 
 
 ## To run
